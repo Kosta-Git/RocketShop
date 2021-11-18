@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Frontend", "RocketShopFrontend\Frontend.esproj", "{D3A5F998-2BD8-4385-8F21-6A65448A3C14}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Frontend", "Frontend\Frontend.esproj", "{D3A5F998-2BD8-4385-8F21-6A65448A3C14}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{7731FC0C-E3CE-4DDB-9AC8-1C60F63407F0}"
 EndProject
