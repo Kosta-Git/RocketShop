@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Models.Results
+namespace DataAccess.Results
 {
     public static class ResultExtensions
     {

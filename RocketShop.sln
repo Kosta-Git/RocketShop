@@ -7,9 +7,9 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Frontend", "Frontend\Fronte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{7731FC0C-E3CE-4DDB-9AC8-1C60F63407F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{63C378C8-630D-42AD-A19E-0B5A701F4DB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{63C378C8-630D-42AD-A19E-0B5A701F4DB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{165C8D93-FEB5-446C-9F7C-ABC4F583255D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\UnitTests.csproj", "{165C8D93-FEB5-446C-9F7C-ABC4F583255D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

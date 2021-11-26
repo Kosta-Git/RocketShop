@@ -33,5 +33,11 @@ namespace API.Controllers
 
             return Ok( callResult.Data );
         }
+
+        [HttpGet("test")]
+        public async Task<IActionResult> GetTest()
+        {
+            return Ok( "Hi" );
+        }
     }
 }
