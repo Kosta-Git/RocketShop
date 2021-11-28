@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAccess.Models;
+namespace DataAccess.Entities;
 
+[Table(nameof(ValidationRule))]
 public class ValidationRule : BaseEntity
 {
     [Required] public float Start { get; set; }

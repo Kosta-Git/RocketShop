@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DataAccess.Results
 {
@@ -96,6 +97,74 @@ namespace DataAccess.Results
         {
             action( result );
             return result;
+        }
+
+        public static ActionResult ToActionResult(this Result result)
+        {
+            return string.IsNullOrEmpty(result.Error)
+                       ? new ObjectResult(null)
+                       {
+                           StatusCode = (int)result.Status
+                       }
+                       : new ObjectResult(result.Error)
+                       {
+                           StatusCode = (int)result.Status
+                       };
+        }
+
+        public static ActionResult<T> ToActionResult<T>(this Result<T> result)
+        {
+            if (result.Failure)
+                return string.IsNullOrEmpty(result.Error)
+                           ? new ObjectResult(null)
+                           {
+                               StatusCode = (int)result.Status
+                           }
+                           : new ObjectResult(result.Error)
+                           {
+                               StatusCode = (int)result.Status
+                           };
+
+            return new ObjectResult(result.Value)
+            {
+                StatusCode = (int)result.Status
+            };
+        }
+
+        public static async Task<ActionResult> ToActionResult(this Task<Result> result)
+        {
+            var res = await result;
+
+            return string.IsNullOrEmpty(res.Error)
+                       ? new ObjectResult(null)
+                       {
+                           StatusCode = (int)res.Status
+                       }
+                       : new ObjectResult(res.Error)
+                       {
+                           StatusCode = (int)res.Status
+                       };
+        }
+
+        public static async Task<ActionResult<T>> ToActionResult<T>(this Task<Result<T>> result)
+        {
+            var res = await result;
+
+            if (res.Failure)
+                return string.IsNullOrEmpty(res.Error)
+                           ? new ObjectResult(null)
+                           {
+                               StatusCode = (int)res.Status
+                           }
+                           : new ObjectResult(res.Error)
+                           {
+                               StatusCode = (int)res.Status
+                           };
+
+            return new ObjectResult(res.Value)
+            {
+                StatusCode = (int)res.Status
+            };
         }
     }
 }

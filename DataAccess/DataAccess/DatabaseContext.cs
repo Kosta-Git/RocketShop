@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using DataAccess.Models;
+using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -58,6 +58,13 @@ namespace DataAccess.DataAccess
                     break;
                 }
             }
+        }
+
+        protected override void OnModelCreating( ModelBuilder modelBuilder )
+        {
+            base.OnModelCreating( modelBuilder );
+
+            modelBuilder.Entity<Coin>().HasIndex( c => new { c.Name, c.Identifier } ).IsUnique();
         }
 
         public DbSet<Coin> Coins { get; set; }

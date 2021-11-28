@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAccess.Models;
+namespace DataAccess.Entities;
 
+[Table(nameof(Validation))]
 public class Validation : BaseEntity
 {
     [Required] public Guid UserGuid { get; set; }

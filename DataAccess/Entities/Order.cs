@@ -1,8 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using DataAccess.Enum;
 
-namespace DataAccess.Models
+namespace DataAccess.Entities
 {
+    [Table(nameof(Order))]
     public class Order : BaseEntity
     {
         [Required] public Guid UserGuid { get; set; }

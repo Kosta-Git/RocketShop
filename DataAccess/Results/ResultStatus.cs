@@ -2,9 +2,11 @@
 {
     public enum ResultStatus
     {
-        Ok,
-        InternalError,
-        InvalidInput,
-        UnknownError
+        Ok = 200,
+        InternalError = 500,
+        NotFound = 404,
+        InvalidInput = 400,
+        AlreadyExists = 400,
+        UnknownError = 500
     }
 }

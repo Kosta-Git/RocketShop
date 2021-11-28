@@ -25,7 +25,7 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ValidationRules",
+                name: "ValidationRule",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -38,11 +38,11 @@ namespace DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ValidationRules", x => x.Id);
+                    table.PrimaryKey("PK_ValidationRule", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "Order",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -58,23 +58,23 @@ namespace DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.PrimaryKey("PK_Order", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders_Coin_CoinId",
+                        name: "FK_Order_Coin_CoinId",
                         column: x => x.CoinId,
                         principalTable: "Coin",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Orders_ValidationRules_ValidationRuleId",
+                        name: "FK_Order_ValidationRule_ValidationRuleId",
                         column: x => x.ValidationRuleId,
-                        principalTable: "ValidationRules",
+                        principalTable: "ValidationRule",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Validations",
+                name: "Validation",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -86,44 +86,50 @@ namespace DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Validations", x => x.Id);
+                    table.PrimaryKey("PK_Validation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Validations_Orders_OrderId",
+                        name: "FK_Validation_Order_OrderId",
                         column: x => x.OrderId,
-                        principalTable: "Orders",
+                        principalTable: "Order",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_CoinId",
-                table: "Orders",
+                name: "IX_Coin_Name_Identifier",
+                table: "Coin",
+                columns: new[] { "Name", "Identifier" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_CoinId",
+                table: "Order",
                 column: "CoinId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_ValidationRuleId",
-                table: "Orders",
+                name: "IX_Order_ValidationRuleId",
+                table: "Order",
                 column: "ValidationRuleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Validations_OrderId",
-                table: "Validations",
+                name: "IX_Validation_OrderId",
+                table: "Validation",
                 column: "OrderId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Validations");
+                name: "Validation");
 
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "Order");
 
             migrationBuilder.DropTable(
                 name: "Coin");
 
             migrationBuilder.DropTable(
-                name: "ValidationRules");
+                name: "ValidationRule");
         }
     }
 }

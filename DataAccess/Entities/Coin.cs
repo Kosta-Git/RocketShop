@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAccess.Models
+namespace DataAccess.Entities
 {
     [Table(nameof(Coin))]
     public class Coin : BaseEntity

@@ -22,7 +22,7 @@ namespace DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DataAccess.Models.Coin", b =>
+            modelBuilder.Entity("DataAccess.Entities.Coin", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -46,10 +46,13 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name", "Identifier")
+                        .IsUnique();
+
                     b.ToTable("Coin");
                 });
 
-            modelBuilder.Entity("DataAccess.Models.Order", b =>
+            modelBuilder.Entity("DataAccess.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -92,10 +95,10 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("ValidationRuleId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Order");
                 });
 
-            modelBuilder.Entity("DataAccess.Models.Validation", b =>
+            modelBuilder.Entity("DataAccess.Entities.Validation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -120,10 +123,10 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Validations");
+                    b.ToTable("Validation");
                 });
 
-            modelBuilder.Entity("DataAccess.Models.ValidationRule", b =>
+            modelBuilder.Entity("DataAccess.Entities.ValidationRule", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -149,18 +152,18 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ValidationRules");
+                    b.ToTable("ValidationRule");
                 });
 
-            modelBuilder.Entity("DataAccess.Models.Order", b =>
+            modelBuilder.Entity("DataAccess.Entities.Order", b =>
                 {
-                    b.HasOne("DataAccess.Models.Coin", "Coin")
+                    b.HasOne("DataAccess.Entities.Coin", "Coin")
                         .WithMany("Orders")
                         .HasForeignKey("CoinId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataAccess.Models.ValidationRule", "ValidationRule")
+                    b.HasOne("DataAccess.Entities.ValidationRule", "ValidationRule")
                         .WithMany()
                         .HasForeignKey("ValidationRuleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -171,9 +174,9 @@ namespace DataAccess.Migrations
                     b.Navigation("ValidationRule");
                 });
 
-            modelBuilder.Entity("DataAccess.Models.Validation", b =>
+            modelBuilder.Entity("DataAccess.Entities.Validation", b =>
                 {
-                    b.HasOne("DataAccess.Models.Order", "Order")
+                    b.HasOne("DataAccess.Entities.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -182,7 +185,7 @@ namespace DataAccess.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("DataAccess.Models.Coin", b =>
+            modelBuilder.Entity("DataAccess.Entities.Coin", b =>
                 {
                     b.Navigation("Orders");
                 });
