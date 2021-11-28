@@ -15,4 +15,14 @@ public class OrderDto
     public string Status { get; set; }
 
     //public ValidationRule ValidationRule { get; set; }
+
+    public OrderDto( Guid userGuid, string walletAddress, string network, float amount, CoinDto coin, string status )
+    {
+        UserGuid      = userGuid;
+        WalletAddress = walletAddress;
+        Network       = network;
+        Amount        = amount;
+        Coin          = coin;
+        Status        = status;
+    }
 }

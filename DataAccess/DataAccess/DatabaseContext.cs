@@ -5,14 +5,16 @@ using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
+
 namespace DataAccess.DataAccess
 {
     public class DatabaseContext : DbContext
     {
+        #pragma warning disable CS8618
         public DatabaseContext() { }
 
         public DatabaseContext( DbContextOptions options ) : base( options ) { }
-
+        #pragma warning restore CS8618
 
         public override int SaveChanges( bool acceptAllChangesOnSuccess )
         {
@@ -39,7 +41,7 @@ namespace DataAccess.DataAccess
             }
         }
 
-        private void BaseEntityHandler( EntityEntry entry, DateTime utcNow )
+        private static void BaseEntityHandler( EntityEntry entry, DateTime utcNow )
         {
             if ( entry.Entity is BaseEntity baseEntity )
             {

@@ -12,4 +12,11 @@ public class Validation : BaseEntity
     [Required] public Order Order { get; set; }
 
     [Required] public bool Accepted { get; set; }
+
+    public Validation( Guid userGuid, Order order, bool accepted )
+    {
+        UserGuid = userGuid;
+        Order    = order;
+        Accepted = accepted;
+    }
 }

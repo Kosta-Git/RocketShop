@@ -7,14 +7,13 @@ public static class OrderExtensions
 {
     public static OrderDto AsDto( this Order order )
     {
-        return new OrderDto
-        {
-            UserGuid      = order.UserGuid,
-            WalletAddress = order.WalletAddress,
-            Network       = order.Network,
-            Amount        = order.Amount,
-            Coin          = order.Coin.AsDto(),
-            Status        = order.Status.ToString()
-        };
+        return new OrderDto(
+            order.UserGuid,
+            order.WalletAddress,
+            order.Network,
+            order.Amount,
+            order.Coin.AsDto(),
+            order.Status.ToString()
+        );
     }
 }

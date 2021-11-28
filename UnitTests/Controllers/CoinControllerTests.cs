@@ -86,11 +86,6 @@ public class CoinControllerTests
 
     private static CoinDto CreateCoin()
     {
-        return new CoinDto
-        {
-            Id         = Guid.NewGuid(),
-            Name       = Guid.NewGuid().ToString(),
-            Identifier = Guid.NewGuid().ToString()
-        };
+        return new CoinDto( Guid.NewGuid(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString() );
     }
 }

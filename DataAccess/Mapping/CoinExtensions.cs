@@ -7,20 +7,11 @@ public static class CoinExtensions
 {
     public static CoinDto AsDto( this Coin coin )
     {
-        return new CoinDto
-        {
-            Id         = coin.Id,
-            Name       = coin.Name,
-            Identifier = coin.Identifier,
-        };
+        return new CoinDto(coin.Id, coin.Name, coin.Identifier);
     }
 
     public static Coin AsCoin( this CoinCreateDto coin )
     {
-        return new Coin()
-        {
-            Name       = coin.Name,
-            Identifier = coin.Identifier,
-        };
+        return new Coin(coin.Name, coin.Identifier, null);
     }
 }

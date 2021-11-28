@@ -16,7 +16,7 @@ public class SqlState
         {
             return ( SqlException )errorCode;
         }
-        catch ( Exception e )
+        catch ( Exception )
         {
             return SqlException.Unknown;
         }

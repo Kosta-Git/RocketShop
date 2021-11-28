@@ -21,5 +21,16 @@ namespace DataAccess.Entities
         [Required] public Status Status { get; set; }
 
         [Required] public ValidationRule ValidationRule { get; set; }
+
+        public Order( Guid userGuid, string walletAddress, string network, float amount, Coin coin, Status status, ValidationRule validationRule )
+        {
+            UserGuid       = userGuid;
+            WalletAddress  = walletAddress;
+            Network        = network;
+            Amount         = amount;
+            Coin           = coin;
+            Status         = status;
+            ValidationRule = validationRule;
+        }
     }
 }

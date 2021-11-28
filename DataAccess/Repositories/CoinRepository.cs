@@ -67,7 +67,7 @@ public class CoinRepository : BaseRepository<CoinRepository>, ICoinRepository
                 return Result.Fail<CoinDto>( "Unknown error" );
             }
         }
-        catch ( Exception e )
+        catch ( Exception )
         {
             return Result.Fail<CoinDto>( "Unknown error" );
         }
