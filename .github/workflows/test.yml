@@ -39,8 +39,8 @@ jobs:
       run: dotnet test UnitTests --no-restore --verbosity normal --logger trx --results-directory "TestResults"
     
     - name: Upload dotnet test results
-          uses: actions/upload-artifact@v2
-          with:
-            name: dotnet-results
-            path: TestResults
-          if: ${{ always() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: dotnet-results
+        path: TestResults
+      if: ${{ always() }}
