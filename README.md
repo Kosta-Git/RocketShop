@@ -1,5 +1,7 @@
 # RocketShop
 
+[![Build and Tests](https://github.com/Kosta-Git/RocketShop/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Kosta-Git/RocketShop/actions/workflows/test.yml)
+
 ## Migrations
 
 Create: `dotnet ef migrations add -p DataAccess -s API <migration name>`
