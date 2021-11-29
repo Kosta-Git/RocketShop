@@ -4,41 +4,41 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
-namespace API
+namespace API;
+
+public class Program
 {
-    public class Program
+    public static int Main( string[] args )
     {
-        public static int Main( string[] args )
+        var configuration = new ConfigurationBuilder()
+                           .AddJsonFile( "appsettings.json" )
+                           .Build();
+
+        Log.Logger = new LoggerConfiguration().ReadFrom.Configuration( configuration ).CreateLogger()
+                                              .ForContext<Program>();
+
+        try
         {
-            var configuration = new ConfigurationBuilder()
-                               .AddJsonFile( "appsettings.json" )
-                               .Build();
-
-            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration( configuration ).CreateLogger();
-
-            try
-            {
-                Log.Information( "Starting API." );
-                CreateHostBuilder( args ).Build().Run();
-                Log.Information( "Shutting down API." );
-                return 0;
-            }
-            catch ( Exception ex )
-            {
-                Log.Fatal( ex, "The API was not able to start properly." );
-                return 1;
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
+            Log.Information( "Starting API." );
+            CreateHostBuilder( args ).Build().Run();
+            Log.Information( "Shutting down API." );
+            return 0;
         }
-
-        public static IHostBuilder CreateHostBuilder( string[] args )
+        catch ( Exception ex )
         {
-            return Host.CreateDefaultBuilder( args )
-                       .UseSerilog()
-                       .ConfigureWebHostDefaults( webBuilder => webBuilder.UseStartup<Startup>() );
+            Log.Fatal( ex, "The API was not able to start properly." );
+            return 1;
         }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
+    }
+
+    public static IHostBuilder CreateHostBuilder( string[] args )
+    {
+        return Host.CreateDefaultBuilder( args )
+                   .UseSerilog()
+                   .ConfigureWebHostDefaults( webBuilder => webBuilder.UseStartup<Startup>() );
     }
 }

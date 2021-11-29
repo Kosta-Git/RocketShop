@@ -9,7 +9,6 @@
     }
   },
   "profiles": {
-
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,

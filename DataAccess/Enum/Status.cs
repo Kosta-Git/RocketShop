@@ -1,10 +1,9 @@
-﻿namespace DataAccess.Enum
+﻿namespace DataAccess.Enum;
+
+public enum Status
 {
-    public enum Status
-    {
-        Pending,
-        Approved,
-        Processed,
-        Rejected
-    }
+    Pending,
+    Approved,
+    Processed,
+    Rejected
 }

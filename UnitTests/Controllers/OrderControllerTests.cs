@@ -1,6 +1,3 @@
 ﻿namespace UnitTests.Controllers;
 
-public class OrderControllerTests
-{
-    
-}
+public class OrderControllerTests { }

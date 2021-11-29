@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.DataAccess;
-using DataAccess.Entities;
 using DataAccess.Exceptions;
 using DataAccess.Mapping;
 using DataAccess.Results;
@@ -21,16 +19,16 @@ public class CoinRepository : BaseRepository<CoinRepository>, ICoinRepository
 
     public async Task<Result<CoinDto>> GetAsync( Guid id )
     {
-        var coin = await _context.Coins.FirstOrDefaultAsync(c => c.Id.Equals(id));
+        var coin = await _context.Coins.FirstOrDefaultAsync( c => c.Id.Equals( id ) );
 
         return coin == null
-            ? Result.Fail<CoinDto>("Coin not found", ResultStatus.NotFound)
-            : Result.Ok(coin.AsDto());
+            ? Result.Fail<CoinDto>( "Coin not found", ResultStatus.NotFound )
+            : Result.Ok( coin.AsDto() );
     }
 
     public async Task<Result<IEnumerable<CoinDto>>> GetAllAsync()
     {
-        return Result.Ok((await _context.Coins.ToListAsync()).Select(c => c.AsDto()));
+        return Result.Ok( ( await _context.Coins.ToListAsync() ).Select( c => c.AsDto() ) );
     }
 
     public async Task<Result<CoinDto>> AddAsync( CoinCreateDto coin )

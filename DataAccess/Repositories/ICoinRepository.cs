@@ -9,6 +9,6 @@ namespace DataAccess.Repositories;
 public interface ICoinRepository
 {
     Task<Result<IEnumerable<CoinDto>>> GetAllAsync();
-    Task<Result<CoinDto>> GetAsync(Guid id);
+    Task<Result<CoinDto>> GetAsync( Guid id );
     Task<Result<CoinDto>> AddAsync( CoinCreateDto coin );
 }

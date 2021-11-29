@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DataAccess.Entities;
 using DataAccess.Enum;
 using DataAccess.Results;
 using Models.DTO;
