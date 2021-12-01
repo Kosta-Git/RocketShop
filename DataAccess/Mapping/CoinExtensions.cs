@@ -10,7 +10,7 @@ public static class CoinExtensions
         return new CoinDto( coin.Id, coin.Name, coin.Identifier );
     }
 
-    public static Coin AsCoin( this CoinCreateDto coin )
+    public static Coin AsEntity( this CoinCreateDto coin )
     {
         return new Coin
         {

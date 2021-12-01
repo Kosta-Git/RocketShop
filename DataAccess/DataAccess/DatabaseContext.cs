@@ -45,7 +45,7 @@ public class DatabaseContext : DbContext
             case EntityState.Modified:
                 // If it was modified update last updated at, and do not touch created on
                 baseEntity.LastUpdatedAt                 = utcNow;
-                entry.Property( "CreatedOn" ).IsModified = false;
+                entry.Property( "CreatedAt" ).IsModified = false;
                 break;
 
             case EntityState.Added:

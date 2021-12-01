@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using DataAccess.DataAccess;
 using DataAccess.Enum;
 using DataAccess.Mapping;
+using DataAccess.Repositories.Interfaces;
 using DataAccess.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.DTO;
 
-namespace DataAccess.Repositories;
+namespace DataAccess.Repositories.Implementations;
 
 public class OrderRepository : BaseRepository<OrderRepository>, IOrderRepository
 {

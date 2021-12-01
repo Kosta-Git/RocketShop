@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccess.Entities;
 
-[Table(nameof(Validation))]
+[Table( nameof( Validation ) )]
 public class Validation : BaseEntity
 {
     [Required] public Guid UserGuid { get; set; }

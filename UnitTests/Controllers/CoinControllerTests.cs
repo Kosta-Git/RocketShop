@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Controllers;
 using DataAccess.Repositories;
+using DataAccess.Repositories.Interfaces;
 using DataAccess.Results;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;

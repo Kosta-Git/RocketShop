@@ -5,7 +5,7 @@ using DataAccess.Enum;
 using DataAccess.Results;
 using Models.DTO;
 
-namespace DataAccess.Repositories;
+namespace DataAccess.Repositories.Interfaces;
 
 public interface IOrderRepository
 {

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DataAccess.DataAccess;
 using DataAccess.Exceptions;
 using DataAccess.Mapping;
+using DataAccess.Repositories.Interfaces;
 using DataAccess.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -33,7 +34,7 @@ public class CoinRepository : BaseRepository<CoinRepository>, ICoinRepository
 
     public async Task<Result<CoinDto>> AddAsync( CoinCreateDto coin )
     {
-        var createdCoin = ( await _context.Coins.AddAsync( coin.AsCoin() ) ).Entity;
+        var createdCoin = ( await _context.Coins.AddAsync( coin.AsEntity() ) ).Entity;
 
         try
         {
@@ -56,7 +57,7 @@ public class CoinRepository : BaseRepository<CoinRepository>, ICoinRepository
                                              ResultStatus.AlreadyExists );
             default:
                 _logger.LogError(
-                    "Unidentified Sql error creating coin: {CoinName}, {CoinIdentifier}, SqlState: {SqlState}",
+                    "Unidentified Sql error creating coin: {CoinName} [{CoinIdentifier}], SqlState: {SqlState}",
                     coin.Name,
                     coin.Identifier,
                     innerException?.SqlState ?? string.Empty

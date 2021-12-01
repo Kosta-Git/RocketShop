@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.Enum;
 using DataAccess.Repositories;
+using DataAccess.Repositories.Interfaces;
 using DataAccess.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

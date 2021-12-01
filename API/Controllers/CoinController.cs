@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DataAccess.Repositories;
+using DataAccess.Repositories.Interfaces;
 using DataAccess.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -22,7 +23,7 @@ public class CoinController : ControllerBase
         _logger         = logger;
     }
 
-    [HttpGet( "{id}", Name = "GetById" )]
+    [HttpGet( "{id}", Name = "CoinGetById" )]
     public async Task<ActionResult<CoinDto>> GetAsync( Guid id )
     {
         return await _coinRepository.GetAsync( id ).ToActionResult();
@@ -41,6 +42,6 @@ public class CoinController : ControllerBase
 
         if ( result.Failure ) return result?.ToActionResult()?.Result ?? BadRequest();
 
-        return CreatedAtRoute( "GetById", new { id = result.Value.Id }, result.Value );
+        return CreatedAtRoute("CoinGetById", new { id = result.Value.Id }, result.Value );
     }
 }
