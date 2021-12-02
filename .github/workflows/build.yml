@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     name: release
     env:
-      TIME: $(date +'%Y-%m-%dT%H-%M-%S')
+      TIME: ${{ $(date +'%Y-%m-%dT%H-%M-%S') }}
       REGISTRY: rg.fr-par.scw.cloud/rocketshop
 
     steps:
