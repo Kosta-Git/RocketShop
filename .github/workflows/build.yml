@@ -35,9 +35,8 @@ jobs:
     - name: Test
       run: dotnet test UnitTests --no-restore
   
-  
   release:
-    if: ${{ github.ref == 'main' }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     needs: build-and-test
 
     runs-on: ubuntu-latest
