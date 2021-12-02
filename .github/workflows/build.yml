@@ -42,22 +42,20 @@ jobs:
     runs-on: ubuntu-latest
     name: release
     env:
+      TIME: $(date +'%Y-%m-%dT%H-%M-%S')
       REGISTRY: rg.fr-par.scw.cloud/rocketshop
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup environment
-        run: echo "NOW::$(date +'%Y-%m-%dT%H-%M-%S')" >> $GITHUB_ENV
-
       - name: Login to registry
         run: docker login rg.fr-par.scw.cloud/rocketshop -u nologin -p ${{ secrets.SCALEWAY_API_KEY }}
 
       - name: Build the Docker image
-        run: docker build . -f API/Dockerfile --compress --tag rocketshop-api:$NOW --label "created-by=github-actions" --label "project=API"
+        run: docker build . -f API/Dockerfile --compress --tag rocketshop-api:${{ env.NOW }} --label "created-by=github-actions" --label "project=API"
 
       - name: Tag image
-        run: docker tag rocketshop-api:$NOW ${{ env.REGISTRY }}/rocketshop-api:$NOW
+        run: docker tag rocketshop-api:${{ env.NOW }} ${{ env.REGISTRY }}/rocketshop-api:${{ env.NOW }}
 
       - name: Push image to registry
-        run: docker push ${{ env.REGISTRY }}/rocketshop-api:$NOW
+        run: docker push ${{ env.REGISTRY }}/rocketshop-api:${{ env.NOW }}

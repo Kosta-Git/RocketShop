@@ -1,6 +1,6 @@
 # RocketShop
 
-[![Build and Tests](https://github.com/Kosta-Git/RocketShop/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Kosta-Git/RocketShop/actions/workflows/test.yml)
+[![Build and test](https://github.com/Kosta-Git/RocketShop/actions/workflows/build.yml/badge.svg)](https://github.com/Kosta-Git/RocketShop/actions/workflows/build.yml)
 
 ## Migrations
 
