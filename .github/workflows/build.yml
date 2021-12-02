@@ -34,3 +34,25 @@ jobs:
       
     - name: Test
       run: dotnet test UnitTests --no-restore
+  
+  release:
+    if: ${{ github.ref == 'main' }}
+    needs: build-and-test
+
+    runs-on: ubuntu-latest
+    name: release
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to registry
+        run: docker login rg.fr-par.scw.cloud/rocketshop -u nologin -p ${{ secrets.SCALEWAY_API_KEY }}
+
+      - name: Build the Docker image
+        run: docker build . -f API/Dockerfile --compress --tag rocketshop-api:$(date +%s) --label "created-by=github-actions" --label "project=API"
+
+      - name: Tag image
+        run: docker tag rocketshop-api:$(date +%s) rg.fr-par.scw.cloud/rocketshop/rocketshop-api:$(date +%s)
+
+      - name: Push image to registry
+        run: docker push rg.fr-par.scw.cloud/rocketshop/rocketshop-api:$(date +%s)
