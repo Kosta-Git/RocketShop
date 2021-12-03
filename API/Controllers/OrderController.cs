@@ -47,7 +47,10 @@ public class OrderController : ControllerBase
 
 
     [HttpPost]
-    public void Post( [FromBody] string value ) { }
+    public async Task<ActionResult<OrderDto>> Post( [FromBody] OrderCreateDto order )
+    {
+        return await _orderRepository.AddAsync( order ).ToActionResult();
+    }
 
     [HttpPut( "{id}" )]
     public void Put( int id, [FromBody] string value ) { }

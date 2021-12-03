@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DataAccess.Enum;
@@ -21,4 +22,6 @@ public class Order : BaseEntity
     [Required] public Status Status { get; set; }
 
     [Required] public ValidationRule ValidationRule { get; set; }
+
+    [Required] public List<Validation> Validations { get; set; }
 }

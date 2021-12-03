@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.DataAccess;
+using DataAccess.Entities;
 using DataAccess.Enum;
 using DataAccess.Mapping;
 using DataAccess.Repositories.Interfaces;
@@ -16,6 +17,25 @@ namespace DataAccess.Repositories.Implementations;
 public class OrderRepository : BaseRepository<OrderRepository>, IOrderRepository
 {
     public OrderRepository( DatabaseContext context, ILogger<OrderRepository> logger ) : base( context, logger ) { }
+
+    public async Task<Result<OrderDto>> AddAsync( OrderCreateDto order )
+    {
+        var coin = await _context.Coins.FirstOrDefaultAsync( c => c.Id.Equals( order.CoinId ) );
+        if ( coin == null ) return Result.Fail<OrderDto>( "The coin does not exist.", ResultStatus.NotFound );
+
+        var rule = await GetValidationRuleForAmountAsync( order.Amount );
+        if ( rule.Failure ) return Result.Fail<OrderDto>( rule.Error, rule.Status );
+
+        var entity = order.AsEntity();
+        entity.Coin           = coin;
+        entity.ValidationRule = rule.Value;
+        entity.Status         = Status.Pending;
+
+        await _context.Orders.AddAsync( entity );
+        await _context.SaveChangesAsync();
+
+        return Result.Ok( entity.AsDto() );
+    }
 
     public async Task<Result<OrderDto>> GetAsync( Guid id )
     {
@@ -42,5 +62,18 @@ public class OrderRepository : BaseRepository<OrderRepository>, IOrderRepository
             ( await _context.Orders.Where( o => statuses.Contains( o.Status ) ).ToListAsync() )
            .Select( o => o.AsDto() )
         );
+    }
+
+    private async Task<Result<ValidationRule>> GetValidationRuleForAmountAsync( float amount )
+    {
+        var rule = await _context.ValidationRules.FirstOrDefaultAsync( r => r.Start <= amount && amount < r.End );
+
+        if ( rule != null ) return Result.Ok( rule );
+
+        rule = await _context.ValidationRules.OrderBy( r => r.End ).FirstOrDefaultAsync();
+
+        if ( rule != null ) return Result.Ok( rule );
+
+        return Result.Fail<ValidationRule>( "No validation rule was found", ResultStatus.NotFound );
     }
 }
