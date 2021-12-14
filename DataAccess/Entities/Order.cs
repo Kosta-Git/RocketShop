@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DataAccess.Enum;
+using Models.Enums;
 
 namespace DataAccess.Entities;
 

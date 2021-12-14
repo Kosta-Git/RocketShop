@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DataAccess.Enum;
 using DataAccess.Repositories;
 using DataAccess.Repositories.Interfaces;
 using DataAccess.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Models.DTO;
+using Models.Enums;
+using Models.Queries;
 
 namespace API.Controllers;
 
@@ -32,19 +33,10 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllAsync()
+    public async Task<ActionResult<Page<OrderDto>>> QueryAsync([FromQuery] OrderQuery query)
     {
-        return await _orderRepository.GetAllAsync().ToActionResult();
+        return await _orderRepository.QueryAsync(query).ToActionResult();
     }
-
-    [HttpPost( "/Query" )]
-    public async Task<ActionResult<IEnumerable<OrderDto>>> GetByStatusAsync( [FromBody] Status[] statuses )
-    {
-        if ( !statuses.Any() ) return BadRequest();
-
-        return await _orderRepository.GetByStatusAsync( statuses ).ToActionResult();
-    }
-
 
     [HttpPost]
     public async Task<ActionResult<OrderDto>> Post( [FromBody] OrderCreateDto order )

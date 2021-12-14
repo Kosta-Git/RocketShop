@@ -1,4 +1,4 @@
-﻿namespace DataAccess.Enum;
+﻿namespace Models.Enums;
 
 public enum Status
 {

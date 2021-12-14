@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.DataAccess;
 using DataAccess.Entities;
-using DataAccess.Enum;
 using DataAccess.Mapping;
 using DataAccess.Repositories.Interfaces;
 using DataAccess.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.DTO;
+using Models.Enums;
+using Models.Queries;
 
 namespace DataAccess.Repositories.Implementations;
 
@@ -39,29 +40,45 @@ public class OrderRepository : BaseRepository<OrderRepository>, IOrderRepository
 
     public async Task<Result<OrderDto>> GetAsync( Guid id )
     {
-        var order = await _context.Orders.FirstOrDefaultAsync( order => order.Id.Equals( id ) );
+        var order = await _context.Orders
+                                  .Include( o => o.Coin )
+                                  .Include( o => o.ValidationRule )
+                                  .Include( o => o.Validations )
+                                  .FirstOrDefaultAsync( order => order.Id.Equals( id ) );
 
         return order == null
             ? Result.Fail<OrderDto>( "Order not found", ResultStatus.NotFound )
             : Result.Ok( order.AsDto() );
     }
 
-    public async Task<Result<IEnumerable<OrderDto>>> GetAllAsync()
+    public async Task<Result<Page<OrderDto>>> QueryAsync( OrderQuery query )
     {
-        return Result.Ok( ( await _context.Orders.ToListAsync() ).Select( order => order.AsDto() ) );
-    }
+        var skip = query.PageNumber * query.PageSize;
+        var total = await _context.Orders
+                                  .Where( order => query.Status.Contains( order.Status ) )
+                                  .CountAsync();
 
-    public async Task<Result<IEnumerable<OrderDto>>> GetByStatusAsync( Status status )
-    {
-        return await GetByStatusAsync( new[] { status } );
-    }
+        var totalPages = ( int )Math.Ceiling( ( decimal )total / ( decimal )query.PageSize );
 
-    public async Task<Result<IEnumerable<OrderDto>>> GetByStatusAsync( Status[] statuses )
-    {
-        return Result.Ok(
-            ( await _context.Orders.Where( o => statuses.Contains( o.Status ) ).ToListAsync() )
-           .Select( o => o.AsDto() )
-        );
+        var values = await _context.Orders
+                                   .Where( order => query.Status.Contains( order.Status ) )
+                                   .Skip( skip )
+                                   .Take( query.PageSize )
+                                   .Include( o => o.Coin )
+                                   .Include( o => o.ValidationRule )
+                                   .Include( o => o.Validations )
+                                   .ToListAsync();
+
+
+        return Result.Ok( new Page<OrderDto>
+        {
+            Data        = values.Select( v => v.AsDto() ),
+            PageNumber  = query.PageNumber,
+            PageSize    = query.PageSize,
+            TotalValues = total,
+            TotalPages  = totalPages,
+            NextPage    = totalPages <= query.PageNumber ? null : query.PageNumber + 1
+        } );
     }
 
     private async Task<Result<ValidationRule>> GetValidationRuleForAmountAsync( float amount )

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DataAccess.Entities;
-using DataAccess.Enum;
 using Models.DTO;
+using Models.Enums;
 
 namespace DataAccess.Mapping;
 

@@ -1,13 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.DataAccess;
-using DataAccess.Enum;
 using DataAccess.Mapping;
 using DataAccess.Repositories.Interfaces;
 using DataAccess.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.DTO;
+using Models.Enums;
 
 namespace DataAccess.Repositories.Implementations;
 

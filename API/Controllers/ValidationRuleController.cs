@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Models.DTO;
+using Models.Queries;
 
 namespace API.Controllers
 {
@@ -32,9 +33,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ValidationRuleDto>>> GetAllAsync()
+        public async Task<ActionResult<Page<ValidationRuleDto>>> Query([FromQuery] ValidationRuleQuery query)
         {
-            return await _validationRuleRepository.GetAllAsync().ToActionResult();
+            return await _validationRuleRepository.QueryAsync(query).ToActionResult();
         }
 
         [HttpPost]
