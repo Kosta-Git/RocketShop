@@ -1,4 +1,4 @@
-﻿namespace DataAccess.Results;
+﻿namespace Models.Results;
 
 public class Result
 {

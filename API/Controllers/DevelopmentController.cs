@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Binance.Net.Interfaces;
 using Binance.Net.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,23 +22,33 @@ namespace API.Controllers
             _logger = logger;
         }
 
+        [HttpGet("networks/{asset}")]
+        public async Task<IActionResult> GetNetworks(string asset)
+        {
+            var userCoins = await _client.General.GetUserCoinsAsync();
+           
+            return Ok(
+                userCoins.Data
+            );
+        }
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var accountInfo = await _client.General.GetAccountInfoAsync();
-            var userCoins   = await _client.General.GetUserCoinsAsync();
-            var quote       = await _client.BSwap.GetQuoteAsync( "BNB", "ETH", 10 );
-            var pools       = await _client.BSwap.GetPoolLiquidityInfoAsync();
+            //var userCoins = await _client.General.GetUserCoinsAsync();
+            //var quote = await _client.BSwap.GetQuoteAsync("BNB", "ETH", 10);
 
-            var data = new
-            {
-                accountInfo = accountInfo.Data,
-                userCoins   = userCoins.Data,
-                quote       = quote.Data,
-                pools       = pools.Data,
-            };
+            //var pools = await _client.BSwap.GetBSwapPoolsAsync();
+            //return Ok(
+            //    new
+            //    {
+            //        userCoins.Data,
+            //        pools = pools.Data.Where(p => p.Assets.Contains("USDT")),
+            //    }
+            //);
 
-            return Ok( data );
+            //var payment = _client.WithdrawDeposit.WithdrawAsync("MATIC", "0xB58d53c21D676f1A0c4ECdE0D806cEa5717fA68d")
+            return Ok();
         }
     }
 }

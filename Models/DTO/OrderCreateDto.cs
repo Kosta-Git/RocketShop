@@ -4,29 +4,32 @@ namespace Models.DTO;
 
 public class OrderCreateDto
 {
-    public OrderCreateDto( Guid userGuid, string walletAddress, string network, float amount, Guid coinId )
+    public OrderCreateDto(
+        Guid userGuid,
+        string walletAddress,
+        string walletAddressTag,
+        string network,
+        float amount,
+        string coin
+    )
     {
-        UserGuid      = userGuid;
-        WalletAddress = walletAddress;
-        Network       = network;
-        Amount        = amount;
-        CoinId        = coinId;
+        UserGuid         = userGuid;
+        WalletAddress    = walletAddress;
+        WalletAddressTag = walletAddressTag;
+        Network          = network;
+        Amount           = amount;
+        Coin             = coin;
     }
 
-    [Required]
-    public Guid UserGuid { get; set; }
+    [Required] public Guid UserGuid { get; set; }
 
-    [Required]
-    [MaxLength(512)]
-    public string WalletAddress { get; set; }
+    [Required] [MaxLength( 512 )] public string WalletAddress { get; set; }
 
-    [Required]
-    [MaxLength(64)]
-    public string Network { get; set; }
+    [MaxLength( 512 )] public string WalletAddressTag { get; set; }
 
-    [Required]
-    public float Amount { get; set; }
+    [Required] [MaxLength( 64 )] public string Network { get; set; }
 
-    [Required]
-    public Guid CoinId { get; set; }
+    [Required] public float Amount { get; set; }
+
+    [Required] public string Coin { get; set; }
 }

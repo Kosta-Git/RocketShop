@@ -14,9 +14,10 @@ public static class OrderExtensions
             order.Id,
             order.UserGuid,
             order.WalletAddress,
+            order.WalletAddressTag,
             order.Network,
             order.Amount,
-            order.Coin.AsDto(),
+            order.Coin,
             order.Status.ToString(),
             order.ValidationRule.AsDto(),
             order.Validations?.Select( v => v.AsDto() )?.ToList() ?? new List<ValidationDto>( 0 )
@@ -27,12 +28,13 @@ public static class OrderExtensions
     {
         return new Order
         {
-            UserGuid      = order.UserGuid,
-            WalletAddress = order.WalletAddress,
-            Network       = order.Network,
-            Amount        = order.Amount,
-            Coin          = new Coin { Id = order.CoinId },
-            Status        = Status.Pending
+            UserGuid         = order.UserGuid,
+            WalletAddress    = order.WalletAddress,
+            WalletAddressTag = order.WalletAddressTag,
+            Network          = order.Network,
+            Amount           = order.Amount,
+            Coin             = order.Coin,
+            Status           = Status.Pending
         };
     }
 }

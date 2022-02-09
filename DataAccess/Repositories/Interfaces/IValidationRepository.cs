@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using DataAccess.Results;
 using Models.DTO;
+using Models.Results;
 
 namespace DataAccess.Repositories.Interfaces;
 

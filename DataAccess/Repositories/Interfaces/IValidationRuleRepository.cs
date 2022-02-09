@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DataAccess.Results;
 using Models.DTO;
 using Models.Queries;
+using Models.Results;
 
 namespace DataAccess.Repositories.Interfaces;
 

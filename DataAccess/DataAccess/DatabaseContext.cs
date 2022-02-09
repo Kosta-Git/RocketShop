@@ -9,7 +9,6 @@ namespace DataAccess.DataAccess;
 
 public class DatabaseContext : DbContext
 {
-    public DbSet<Coin> Coins { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<Validation> Validations { get; set; }
     public DbSet<ValidationRule> ValidationRules { get; set; }
@@ -59,8 +58,6 @@ public class DatabaseContext : DbContext
     protected override void OnModelCreating( ModelBuilder modelBuilder )
     {
         base.OnModelCreating( modelBuilder );
-
-        modelBuilder.Entity<Coin>().HasIndex( c => new { c.Name, c.Identifier } ).IsUnique();
     }
     #pragma warning disable CS8618
     public DatabaseContext() { }

@@ -22,7 +22,7 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices( IServiceCollection services )
     {
-        services.InitBinance( Configuration ).InitDb( Configuration );
+        services.InitBinance( Configuration ).InitDb( Configuration ).InitServices();
         services.AddControllers();
         services.AddSwaggerGen( c => { c.SwaggerDoc( "v1", new OpenApiInfo { Title = "API", Version = "v1" } ); } );
         services.AddHealthChecks()
@@ -49,7 +49,7 @@ public class Startup
             app.UseSwagger();
             app.UseSwaggerUI( c => c.SwaggerEndpoint( "/swagger/v1/swagger.json", "API v1" ) );
         }
-        
+
         app.UseHttpsRedirection();
         app.UseSerilogRequestLogging();
         app.UseRouting();

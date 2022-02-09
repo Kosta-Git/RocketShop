@@ -6,11 +6,11 @@ using DataAccess.DataAccess;
 using DataAccess.Entities;
 using DataAccess.Mapping;
 using DataAccess.Repositories.Interfaces;
-using DataAccess.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.DTO;
 using Models.Queries;
+using Models.Results;
 
 namespace DataAccess.Repositories.Implementations;
 
@@ -39,6 +39,7 @@ public class ValidationRuleRepository : BaseRepository<ValidationRuleRepository>
     public async Task<Result<Page<ValidationRuleDto>>> QueryAsync( ValidationRuleQuery query )
     {
         var skip = query.PageNumber * query.PageSize;
+        
         var total = await _context.ValidationRules
                                   .Where( rule => rule.Start   >= query.StartValue &&
                                                   rule.End     <= query.EndValue   &&

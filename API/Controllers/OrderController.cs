@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Binance.Net.Interfaces;
 using DataAccess.Repositories;
 using DataAccess.Repositories.Interfaces;
-using DataAccess.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Models.DTO;
 using Models.Enums;
 using Models.Queries;
+using Models.Results;
 
 namespace API.Controllers;
 
@@ -33,9 +34,9 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<Page<OrderDto>>> QueryAsync([FromQuery] OrderQuery query)
+    public async Task<ActionResult<Page<OrderDto>>> QueryAsync( [FromQuery] OrderQuery query )
     {
-        return await _orderRepository.QueryAsync(query).ToActionResult();
+        return await _orderRepository.QueryAsync( query ).ToActionResult();
     }
 
     [HttpPost]

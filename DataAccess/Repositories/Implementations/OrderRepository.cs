@@ -6,12 +6,12 @@ using DataAccess.DataAccess;
 using DataAccess.Entities;
 using DataAccess.Mapping;
 using DataAccess.Repositories.Interfaces;
-using DataAccess.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models.DTO;
 using Models.Enums;
 using Models.Queries;
+using Models.Results;
 
 namespace DataAccess.Repositories.Implementations;
 
@@ -21,14 +21,15 @@ public class OrderRepository : BaseRepository<OrderRepository>, IOrderRepository
 
     public async Task<Result<OrderDto>> AddAsync( OrderCreateDto order )
     {
-        var coin = await _context.Coins.FirstOrDefaultAsync( c => c.Id.Equals( order.CoinId ) );
-        if ( coin == null ) return Result.Fail<OrderDto>( "The coin does not exist.", ResultStatus.NotFound );
+        // TODO: Validate coing using cache
+        //var coin = await _context.Coins.FirstOrDefaultAsync( c => c.Id.Equals( order.CoinId ) );
+        //if ( coin == null ) return Result.Fail<OrderDto>( "The coin does not exist.", ResultStatus.NotFound );
 
         var rule = await GetValidationRuleForAmountAsync( order.Amount );
         if ( rule.Failure ) return Result.Fail<OrderDto>( rule.Error, rule.Status );
 
         var entity = order.AsEntity();
-        entity.Coin           = coin;
+        entity.Coin           = order.Coin;
         entity.ValidationRule = rule.Value;
         entity.Status         = Status.Pending;
 

@@ -6,22 +6,24 @@ public class OrderDto
         Guid id,
         Guid userGuid,
         string walletAddress,
+        string walletAddressTag,
         string network,
         float amount,
-        CoinDto coin,
+        string coin,
         string status,
         ValidationRuleDto validationRule,
         List<ValidationDto> validations )
     {
-        Id             = id;
-        UserGuid       = userGuid;
-        WalletAddress  = walletAddress;
-        Network        = network;
-        Amount         = amount;
-        Coin           = coin;
-        Status         = status;
-        ValidationRule = validationRule;
-        Validations    = validations;
+        Id               = id;
+        UserGuid         = userGuid;
+        WalletAddress    = walletAddress;
+        WalletAddressTag = walletAddressTag;
+        Network          = network;
+        Amount           = amount;
+        Coin             = coin;
+        Status           = status;
+        ValidationRule   = validationRule;
+        Validations      = validations;
     }
 
     public Guid Id { get; set; }
@@ -30,11 +32,13 @@ public class OrderDto
 
     public string WalletAddress { get; set; }
 
+    public string WalletAddressTag { get; set; }
+
     public string Network { get; set; }
 
     public float Amount { get; set; }
 
-    public CoinDto Coin { get; set; }
+    public string Coin { get; set; }
 
     public string Status { get; set; }
 
