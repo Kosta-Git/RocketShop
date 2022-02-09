@@ -1,4 +1,5 @@
 ﻿using BLL.Services.Coins;
+using BLL.Services.Swaps;
 using DataAccess.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,7 @@ public static class ServicesExtensions
     {
         service.AddMemoryCache();
         service.AddScoped<ICoinService, CoinService>();
+        service.AddScoped<ISwapService, SwapService>();
 
         return service;
     }
