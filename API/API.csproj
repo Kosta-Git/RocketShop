@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="6.0.1" />
-    <PackageReference Include="Binance.Net" Version="7.2.7" />
+    <PackageReference Include="Binance.Net" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>

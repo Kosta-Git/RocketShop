@@ -1,6 +1,6 @@
 ﻿using System.Collections;
-using Binance.Net.Interfaces;
-using Binance.Net.Objects.Spot.WalletData;
+using Binance.Net.Interfaces.Clients;
+using Binance.Net.Objects.Models.Spot;
 using DataAccess.Services;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -25,9 +25,9 @@ public class CoinService : ICoinService
         GetCachedCoins().Wait();
     }
 
-    private async Task<Dictionary<string, BinanceUserCoin>> GetCachedCoins()
+    private async Task<Dictionary<string, BinanceUserAsset>> GetCachedCoins()
     {
-        Dictionary<string, BinanceUserCoin> coins = new();
+        Dictionary<string, BinanceUserAsset> coins = new();
 
         // Try fetching coins
         if ( !_cache.TryGetValue( CacheKey, out coins ) )
@@ -43,7 +43,7 @@ public class CoinService : ICoinService
     private async Task FetchCoins()
     {
         // Fetch all available coins the account can interact with
-        var coinsResponse = await _client.General.GetUserCoinsAsync();
+        var coinsResponse = await _client.SpotApi.Account.GetUserAssetsAsync();
 
         // Check if the response was a success
         if ( coinsResponse.Success )
@@ -52,7 +52,7 @@ public class CoinService : ICoinService
             using var coinsEntry = _cache.CreateEntry( CacheKey );
 
 
-            coinsEntry.Value = coinsResponse.Data.ToDictionary( k => k.Coin.ToUpperInvariant(), c => c );
+            coinsEntry.Value = coinsResponse.Data.ToDictionary( k => k.Asset.ToUpperInvariant(), c => c );
             coinsEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes( 5 );
 
             // Log that cache was refreshed
@@ -64,16 +64,16 @@ public class CoinService : ICoinService
         }
     }
 
-    public async Task<Result<IEnumerable<BinanceUserCoin>>> GetCoins()
+    public async Task<Result<IEnumerable<BinanceUserAsset>>> GetCoins()
     {
         return Result.Ok( ( await GetCachedCoins() ).Values.AsEnumerable() );
     }
 
-    public async Task<Result<BinanceUserCoin>> GetCoin( string coin )
+    public async Task<Result<BinanceUserAsset>> GetCoin( string coin )
     {
         var coins = await GetCachedCoins();
         return !coins.TryGetValue( coin.ToUpperInvariant(), out var cachedCoin )
-            ? Result.Fail<BinanceUserCoin>( "Coin was not found" )
+            ? Result.Fail<BinanceUserAsset>( "Coin was not found" )
             : Result.Ok( cachedCoin );
     }
 
