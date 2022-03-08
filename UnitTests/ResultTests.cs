@@ -1,5 +1,5 @@
-using DataAccess.Results;
 using FluentAssertions;
+using Models.Results;
 using Xunit;
 
 namespace UnitTests;

@@ -25,7 +25,6 @@ public static class DatabaseExtensions
         } );
 
         service.AddScoped<IOrderRepository, OrderRepository>();
-        service.AddScoped<ICoinRepository, CoinRepository>();
         service.AddScoped<IValidationRuleRepository, ValidationRuleRepository>();
 
         return service;

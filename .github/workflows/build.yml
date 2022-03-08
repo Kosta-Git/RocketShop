@@ -42,6 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     name: release
     env:
+      IMAGE_NAME: rocketshop-api
       REGISTRY: rg.fr-par.scw.cloud/rocketshop
 
     steps:
@@ -52,13 +53,13 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H-%M-%S')"
 
       - name: Login to registry
-        run: docker login rg.fr-par.scw.cloud/rocketshop -u nologin -p ${{ secrets.SCALEWAY_API_KEY }}
+        run: docker login ${{ env.REGISTRY }} -u nologin -p ${{ secrets.SCALEWAY_API_KEY }}
 
       - name: Build the Docker image
-        run: docker build . -f API/Dockerfile --compress --tag rocketshop-api:${{ steps.date.outputs.date }} --label "created-by=github-actions" --label "project=API"
+        run: docker build . -f API/Dockerfile --compress --tag ${{ env.IMAGE_NAME }}:${{ steps.date.outputs.date }}
 
       - name: Tag image
-        run: docker tag rocketshop-api:${{ steps.date.outputs.date }} ${{ env.REGISTRY }}/rocketshop-api:${{ steps.date.outputs.date }}
+        run: docker tag ${{ env.IMAGE_NAME }}:${{ steps.date.outputs.date }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.date.outputs.date }}
 
       - name: Push image to registry
-        run: docker push ${{ env.REGISTRY }}/rocketshop-api:${{ steps.date.outputs.date }}
+        run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.date.outputs.date }}

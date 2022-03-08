@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DataAccess.Enum;
+using Binance.Net.Interfaces;
 using DataAccess.Repositories;
 using DataAccess.Repositories.Interfaces;
-using DataAccess.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Models.DTO;
+using Models.Enums;
+using Models.Queries;
+using Models.Results;
 
 namespace API.Controllers;
 
@@ -32,22 +34,16 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllAsync()
+    public async Task<ActionResult<Page<OrderDto>>> QueryAsync( [FromQuery] OrderQuery query )
     {
-        return await _orderRepository.GetAllAsync().ToActionResult();
+        return await _orderRepository.QueryAsync( query ).ToActionResult();
     }
-
-    [HttpPost( "/Query" )]
-    public async Task<ActionResult<IEnumerable<OrderDto>>> GetByStatusAsync( [FromBody] Status[] statuses )
-    {
-        if ( !statuses.Any() ) return BadRequest();
-
-        return await _orderRepository.GetByStatusAsync( statuses ).ToActionResult();
-    }
-
 
     [HttpPost]
-    public void Post( [FromBody] string value ) { }
+    public async Task<ActionResult<OrderDto>> Post( [FromBody] OrderCreateDto order )
+    {
+        return await _orderRepository.AddAsync( order ).ToActionResult();
+    }
 
     [HttpPut( "{id}" )]
     public void Put( int id, [FromBody] string value ) { }

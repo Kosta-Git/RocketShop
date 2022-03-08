@@ -1,5 +1,7 @@
 ﻿using Binance.Net;
+using Binance.Net.Clients;
 using Binance.Net.Interfaces;
+using Binance.Net.Interfaces.Clients;
 using Binance.Net.Objects;
 using CryptoExchange.Net.Authentication;
 using Microsoft.Extensions.Configuration;
@@ -29,7 +31,10 @@ public static class BinanceExtensions
         {
             ApiCredentials = new ApiCredentials( key, secret ),
             LogLevel       = LogLevel.Information,
-            BaseAddress    = $"https://{domain}"
+            SpotApiOptions = new BinanceApiClientOptions
+            {
+                BaseAddress = $"https://{domain}"
+            }
         };
     }
 }

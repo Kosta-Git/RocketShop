@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DataAccess.Repositories;
-using DataAccess.Repositories.Interfaces;
-using DataAccess.Results;
+using Binance.Net.Objects.Models.Spot;
+using Binance.Net.Objects.Models.Spot.BSwap;
+using BLL.Services.SwapPools;
+using BLL.Services.Swaps;
+using DataAccess.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Models.DTO;
+using Models.Results;
 
 namespace API.Controllers;
 
@@ -14,34 +16,38 @@ namespace API.Controllers;
 [ApiController]
 public class CoinController : ControllerBase
 {
-    private readonly ICoinRepository _coinRepository;
+    private readonly ICoinService _coinService;
+    private readonly ISwapPoolsService _swapPoolsService;
     private readonly ILogger<CoinController> _logger;
 
-    public CoinController( ICoinRepository coinRepository, ILogger<CoinController> logger )
+    public CoinController( ILogger<CoinController> logger, ICoinService coinService, ISwapPoolsService swapPoolsService )
     {
-        _coinRepository = coinRepository;
-        _logger         = logger;
-    }
-
-    [HttpGet( "{id}", Name = "CoinGetById" )]
-    public async Task<ActionResult<CoinDto>> GetAsync( Guid id )
-    {
-        return await _coinRepository.GetAsync( id ).ToActionResult();
+        _logger      = logger;
+        _coinService = coinService;
+        _swapPoolsService = swapPoolsService;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CoinDto>>> GetAllAsync()
+    public async Task<ActionResult<IEnumerable<BinanceUserAsset>>> GetAllAsync()
     {
-        return await _coinRepository.GetAllAsync().ToActionResult();
+        return await _coinService.GetCoins().ToActionResult();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> AddAsync( [FromBody] CoinCreateDto coin )
+    [HttpGet( "{coin}" )]
+    public async Task<ActionResult<BinanceUserAsset>> GetAsync( string coin )
     {
-        var result = await _coinRepository.AddAsync( coin );
+        return await _coinService.GetCoin( coin ).ToActionResult();
+    }
 
-        if ( result.Failure ) return result?.ToActionResult()?.Result ?? BadRequest();
+    [HttpGet( "Networks/{coin}" )]
+    public async Task<ActionResult<IEnumerable<BinanceNetwork>>> GetNetworksAsync( string coin )
+    {
+        return await _coinService.GetCoinNetworks( coin ).ToActionResult();
+    }
 
-        return CreatedAtRoute("CoinGetById", new { id = result.Value.Id }, result.Value );
+    [HttpGet( "Purchasable" )]
+    public async Task<ActionResult<IEnumerable<BinanceBSwapPool>>> GetPurchasableAsync()
+    {
+        return await _swapPoolsService.GetAll().ToActionResult();
     }
 }
