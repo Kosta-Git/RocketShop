@@ -16,4 +16,9 @@
     <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Utils\" />
+    <Folder Include="Services\Funds\" />
+  </ItemGroup>
+
 </Project>

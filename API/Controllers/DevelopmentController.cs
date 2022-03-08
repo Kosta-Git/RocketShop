@@ -4,9 +4,12 @@ using System.Threading.Tasks;
 using Binance.Net.Interfaces;
 using Binance.Net.Interfaces;
 using Binance.Net.Interfaces.Clients;
+using Binance.Net.Objects.Models.Spot.BSwap;
+using BLL.Services.Swaps;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Models.Results;
 
 namespace API.Controllers
 {
@@ -15,12 +18,14 @@ namespace API.Controllers
     public class DevelopmentController : ControllerBase
     {
         private readonly IBinanceClient _client;
+        private readonly ISwapService _swapService;
         private readonly ILogger<DevelopmentController> _logger;
 
-        public DevelopmentController( IBinanceClient client, ILogger<DevelopmentController> logger )
+        public DevelopmentController( IBinanceClient client, ILogger<DevelopmentController> logger, ISwapService swapService )
         {
-            _client = client;
-            _logger = logger;
+            _client           = client;
+            _logger           = logger;
+            _swapService = swapService;
         }
 
         [HttpGet( "networks/{asset}" )]
@@ -34,15 +39,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<BinanceBSwapQuote>> Get([FromQuery] string asset, [FromQuery] decimal quantity)
         {
-            var quote     = await _client.SpotApi.Trading.GetLiquidityPoolSwapQuoteAsync( "USDT", "ADA", 5 );
-            return Ok(
-                new
-                {
-                    quote
-                }
-            );
+            return await _swapService.GetQuote("USDT", asset, quantity).ToActionResult();
         }
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Binance.Net.Objects.Models.Spot;
+using Binance.Net.Objects.Models.Spot.BSwap;
+using BLL.Services.SwapPools;
 using BLL.Services.Swaps;
 using DataAccess.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +46,7 @@ public class CoinController : ControllerBase
     }
 
     [HttpGet( "Purchasable" )]
-    public async Task<ActionResult<IEnumerable<string>>> GetPurchasableAsync()
+    public async Task<ActionResult<IEnumerable<BinanceBSwapPool>>> GetPurchasableAsync()
     {
         return await _swapPoolsService.GetAll().ToActionResult();
     }

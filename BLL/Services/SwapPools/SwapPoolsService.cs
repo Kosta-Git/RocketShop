@@ -1,5 +1,6 @@
 ﻿using Binance.Net.Interfaces;
 using Binance.Net.Interfaces.Clients;
+using Binance.Net.Objects.Models.Spot.BSwap;
 using BLL.Services.Swaps;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -23,9 +24,9 @@ public class SwapPoolsService : ISwapPoolsService
         _logger = logger;
     }
 
-    private async Task<IEnumerable<string>> GetCachedPools()
+    private async Task<IEnumerable<BinanceBSwapPool>> GetCachedPools()
     {
-        IEnumerable<string> pools = new List<string>();
+        IEnumerable<BinanceBSwapPool> pools = new List<BinanceBSwapPool>();
 
         // Try fetching pools
         if ( !_cache.TryGetValue( CacheKey, out pools ) )
@@ -50,11 +51,7 @@ public class SwapPoolsService : ISwapPoolsService
             using var poolsEntry = _cache.CreateEntry( CacheKey );
 
             // We only want to fetch coins from USDT swap pools
-            var availableCoinsFromBaseCoin = swapPoolsResponse.Data
-                                                              .Where( sp => sp.Assets.Contains( BaseCoin ) )
-                                                              .Select( sp => sp.Assets
-                                                                          .Where( p => !p.Equals( BaseCoin ) )
-                                                                         ?.FirstOrDefault() ?? "" );
+            var availableCoinsFromBaseCoin = swapPoolsResponse.Data;
 
             poolsEntry.Value                           = availableCoinsFromBaseCoin;
             poolsEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes( 5 );
@@ -68,8 +65,26 @@ public class SwapPoolsService : ISwapPoolsService
         }
     }
 
-    public async Task<Result<IEnumerable<string>>> GetAll()
+    public async Task<Result<IEnumerable<BinanceBSwapPool>>> GetAll()
     {
         return Result.Ok( await GetCachedPools() );
+    }
+
+    public async Task<Result> Exists( string primaryAsset, string secondaryAsset )
+    {
+        try
+        {
+            var pools = await GetCachedPools();
+
+            return pools.Any( p => p.Assets.Contains( primaryAsset ) && p.Assets.Contains( secondaryAsset ) )
+                ? Result.Ok()
+                : Result.Fail( "Does not exists" );
+        }
+        catch ( Exception e )
+        {
+            return Result.Fail( "Unable to fetch swap pools" );
+        }
+
+        
     }
 }
