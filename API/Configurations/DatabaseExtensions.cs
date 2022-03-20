@@ -25,6 +25,7 @@ public static class DatabaseExtensions
         } );
 
         service.AddScoped<IOrderRepository, OrderRepository>();
+        service.AddScoped<IValidationRepository, ValidationRepository>();
         service.AddScoped<IValidationRuleRepository, ValidationRuleRepository>();
 
         return service;

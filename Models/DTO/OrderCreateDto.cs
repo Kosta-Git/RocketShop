@@ -7,7 +7,7 @@ public class OrderCreateDto
     public OrderCreateDto(
         Guid userGuid,
         string walletAddress,
-        string walletAddressTag,
+        string? walletAddressTag,
         string network,
         float amount,
         string coin
@@ -25,7 +25,7 @@ public class OrderCreateDto
 
     [Required] [MaxLength( 512 )] public string WalletAddress { get; set; }
 
-    [MaxLength( 512 )] public string WalletAddressTag { get; set; }
+    [MaxLength( 512 )] public string? WalletAddressTag { get; set; }
 
     [Required] [MaxLength( 64 )] public string Network { get; set; }
 

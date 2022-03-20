@@ -13,10 +13,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Services\Orders\" />
+    <Folder Include="Services\Withdraw\" />
     <Folder Include="Utils\" />
     <Folder Include="Services\Funds\" />
   </ItemGroup>

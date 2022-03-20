@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DataAccess.Entities;
+using DataAccess.Mapping;
 using DataAccess.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,13 +29,13 @@ namespace API.Controllers
 
 
         [HttpGet( "{id}", Name = "RuleGetById" )]
-        public async Task<ActionResult<ValidationRuleDto>> GetAsync( Guid id )
+        public async Task<ActionResult<ValidationRule>> GetAsync( Guid id )
         {
             return await _validationRuleRepository.GetAsync( id ).ToActionResult();
         }
 
         [HttpGet]
-        public async Task<ActionResult<Page<ValidationRuleDto>>> Query([FromQuery] ValidationRuleQuery query)
+        public async Task<ActionResult<Page<ValidationRule>>> Query([FromQuery] ValidationRuleQuery query)
         {
             return await _validationRuleRepository.QueryAsync(query).ToActionResult();
         }
@@ -41,7 +43,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync( [FromBody] ValidationRuleCreateDto rule )
         {
-            var result = await _validationRuleRepository.AddAsync( rule );
+            var result = await _validationRuleRepository.AddAsync( rule.AsEntity() );
 
             if ( result.Failure ) return result?.ToActionResult()?.Result ?? BadRequest();
 
@@ -49,10 +51,10 @@ namespace API.Controllers
         }
 
         [HttpPut( "{id}" )]
-        public async Task<ActionResult<ValidationRuleDto>> UpdateAsync(
+        public async Task<ActionResult<ValidationRule>> UpdateAsync(
             Guid id, [FromBody] ValidationRuleCreateDto rule )
         {
-            return await _validationRuleRepository.UpdateAsync( id, rule ).ToActionResult();
+            return await _validationRuleRepository.UpdateAsync( id, rule.AsEntity() ).ToActionResult();
         }
 
         [HttpDelete( "{id}" )]

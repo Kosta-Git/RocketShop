@@ -6,7 +6,7 @@ public class OrderDto
         Guid id,
         Guid userGuid,
         string walletAddress,
-        string walletAddressTag,
+        string? walletAddressTag,
         string network,
         float amount,
         string coin,
@@ -32,7 +32,7 @@ public class OrderDto
 
     public string WalletAddress { get; set; }
 
-    public string WalletAddressTag { get; set; }
+    public string? WalletAddressTag { get; set; }
 
     public string Network { get; set; }
 

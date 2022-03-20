@@ -13,7 +13,7 @@ public class Order : BaseEntity
 
     [Required] [MaxLength( 512 )] public string WalletAddress { get; set; }
 
-    [MaxLength( 512 )] public string WalletAddressTag { get; set; }
+    [MaxLength( 512 )] public string? WalletAddressTag { get; set; }
 
     [Required] public string Coin { get; set; }
 

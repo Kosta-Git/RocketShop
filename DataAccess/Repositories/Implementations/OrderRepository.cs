@@ -19,40 +19,28 @@ public class OrderRepository : BaseRepository<OrderRepository>, IOrderRepository
 {
     public OrderRepository( DatabaseContext context, ILogger<OrderRepository> logger ) : base( context, logger ) { }
 
-    public async Task<Result<OrderDto>> AddAsync( OrderCreateDto order )
+    public async Task<Result<Order>> AddAsync( Order order )
     {
-        // TODO: Validate coing using cache
-        //var coin = await _context.Coins.FirstOrDefaultAsync( c => c.Id.Equals( order.CoinId ) );
-        //if ( coin == null ) return Result.Fail<OrderDto>( "The coin does not exist.", ResultStatus.NotFound );
-
-        var rule = await GetValidationRuleForAmountAsync( order.Amount );
-        if ( rule.Failure ) return Result.Fail<OrderDto>( rule.Error, rule.Status );
-
-        var entity = order.AsEntity();
-        entity.Coin           = order.Coin;
-        entity.ValidationRule = rule.Value;
-        entity.Status         = Status.Pending;
-
-        await _context.Orders.AddAsync( entity );
+        order.Status = Status.Pending;
+        await _context.Orders.AddAsync( order );
         await _context.SaveChangesAsync();
 
-        return Result.Ok( entity.AsDto() );
+        return Result.Ok( order );
     }
 
-    public async Task<Result<OrderDto>> GetAsync( Guid id )
+    public async Task<Result<Order>> GetAsync( Guid id )
     {
         var order = await _context.Orders
-                                  .Include( o => o.Coin )
                                   .Include( o => o.ValidationRule )
                                   .Include( o => o.Validations )
                                   .FirstOrDefaultAsync( order => order.Id.Equals( id ) );
 
         return order == null
-            ? Result.Fail<OrderDto>( "Order not found", ResultStatus.NotFound )
-            : Result.Ok( order.AsDto() );
+            ? Result.Fail<Order>( "Order not found", ResultStatus.NotFound )
+            : Result.Ok( order );
     }
 
-    public async Task<Result<Page<OrderDto>>> QueryAsync( OrderQuery query )
+    public async Task<Result<Page<Order>>> QueryAsync( OrderQuery query )
     {
         var skip = query.PageNumber * query.PageSize;
         var total = await _context.Orders
@@ -65,33 +53,19 @@ public class OrderRepository : BaseRepository<OrderRepository>, IOrderRepository
                                    .Where( order => query.Status.Contains( order.Status ) )
                                    .Skip( skip )
                                    .Take( query.PageSize )
-                                   .Include( o => o.Coin )
                                    .Include( o => o.ValidationRule )
                                    .Include( o => o.Validations )
                                    .ToListAsync();
 
 
-        return Result.Ok( new Page<OrderDto>
+        return Result.Ok( new Page<Order>
         {
-            Data        = values.Select( v => v.AsDto() ),
+            Data        = values,
             PageNumber  = query.PageNumber,
             PageSize    = query.PageSize,
             TotalValues = total,
             TotalPages  = totalPages,
             NextPage    = totalPages <= query.PageNumber ? null : query.PageNumber + 1
         } );
-    }
-
-    private async Task<Result<ValidationRule>> GetValidationRuleForAmountAsync( float amount )
-    {
-        var rule = await _context.ValidationRules.FirstOrDefaultAsync( r => r.Start <= amount && amount < r.End );
-
-        if ( rule != null ) return Result.Ok( rule );
-
-        rule = await _context.ValidationRules.OrderBy( r => r.End ).FirstOrDefaultAsync();
-
-        if ( rule != null ) return Result.Ok( rule );
-
-        return Result.Fail<ValidationRule>( "No validation rule was found", ResultStatus.NotFound );
     }
 }

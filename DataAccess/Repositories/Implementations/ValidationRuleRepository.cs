@@ -19,27 +19,36 @@ public class ValidationRuleRepository : BaseRepository<ValidationRuleRepository>
     public ValidationRuleRepository( DatabaseContext context, ILogger<ValidationRuleRepository> logger ) : base(
         context, logger ) { }
 
-    public async Task<Result<ValidationRuleDto>> AddAsync( ValidationRuleCreateDto rule )
+    public async Task<Result<ValidationRule>> AddAsync( ValidationRule rule )
     {
-        var createdRule = ( await _context.ValidationRules.AddAsync( rule.AsEntity() ) ).Entity;
+        var createdRule = ( await _context.ValidationRules.AddAsync( rule ) ).Entity;
         await _context.SaveChangesAsync();
 
-        return Result.Ok( createdRule.AsDto() );
+        return Result.Ok( createdRule );
     }
 
-    public async Task<Result<ValidationRuleDto>> GetAsync( Guid ruleId )
+    public async Task<Result<ValidationRule>> GetAsync( Guid ruleId )
     {
         var rule = await _context.ValidationRules.FirstOrDefaultAsync( r => r.Id.Equals( ruleId ) );
 
         return rule == null
-            ? Result.Fail<ValidationRuleDto>( "Unable to find rule", ResultStatus.NotFound )
-            : Result.Ok( rule.AsDto() );
+            ? Result.Fail<ValidationRule>( "Unable to find rule", ResultStatus.NotFound )
+            : Result.Ok( rule );
     }
 
-    public async Task<Result<Page<ValidationRuleDto>>> QueryAsync( ValidationRuleQuery query )
+    public async Task<Result<ValidationRule>> GetForAmountAsync( float amount )
+    {
+        var rule = await _context.ValidationRules.FirstOrDefaultAsync( r => r.Start <= amount && amount < r.End && r.Enabled );
+
+        return rule != null
+            ? Result.Ok( rule )
+            : Result.Fail<ValidationRule>( "Unable to find a rule for price" );
+    }
+
+    public async Task<Result<Page<ValidationRule>>> QueryAsync( ValidationRuleQuery query )
     {
         var skip = query.PageNumber * query.PageSize;
-        
+
         var total = await _context.ValidationRules
                                   .Where( rule => rule.Start   >= query.StartValue &&
                                                   rule.End     <= query.EndValue   &&
@@ -59,9 +68,9 @@ public class ValidationRuleRepository : BaseRepository<ValidationRuleRepository>
                                    .ToListAsync();
 
 
-        return Result.Ok( new Page<ValidationRuleDto>
+        return Result.Ok( new Page<ValidationRule>
         {
-            Data        = values.Select( v => v.AsDto() ),
+            Data        = values,
             PageNumber  = query.PageNumber,
             PageSize    = query.PageSize,
             TotalValues = total,
@@ -70,11 +79,11 @@ public class ValidationRuleRepository : BaseRepository<ValidationRuleRepository>
         } );
     }
 
-    public async Task<Result<ValidationRuleDto>> UpdateAsync( Guid ruleId, ValidationRuleCreateDto updatedRule )
+    public async Task<Result<ValidationRule>> UpdateAsync( Guid ruleId, ValidationRule updatedRule )
     {
         var rule = await _context.ValidationRules.FirstOrDefaultAsync( r => r.Id.Equals( ruleId ) );
 
-        if ( rule == null ) return Result.Fail<ValidationRuleDto>( "Unable to find rule", ResultStatus.NotFound );
+        if ( rule == null ) return Result.Fail<ValidationRule>( "Unable to find rule", ResultStatus.NotFound );
 
         rule.Start         = updatedRule.Start;
         rule.End           = updatedRule.End;
@@ -83,7 +92,7 @@ public class ValidationRuleRepository : BaseRepository<ValidationRuleRepository>
 
         await _context.SaveChangesAsync();
 
-        return Result.Ok( rule.AsDto() );
+        return Result.Ok( rule );
     }
 
     public async Task<Result> DeleteAsync( Guid ruleId )

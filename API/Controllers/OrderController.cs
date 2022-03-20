@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Binance.Net.Interfaces;
+using BLL.Services.Orders;
 using DataAccess.Repositories;
 using DataAccess.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -19,30 +20,30 @@ namespace API.Controllers;
 public class OrderController : ControllerBase
 {
     private readonly ILogger<OrderController> _logger;
-    private readonly IOrderRepository _orderRepository;
+    private readonly IOrderService _orderService;
 
-    public OrderController( IOrderRepository orderRepository, ILogger<OrderController> logger )
+    public OrderController( IOrderService orderService, ILogger<OrderController> logger )
     {
-        _orderRepository = orderRepository;
-        _logger          = logger;
+        _orderService = orderService;
+        _logger       = logger;
     }
 
     [HttpGet( "{id}" )]
     public async Task<ActionResult<OrderDto>> GetAsync( Guid id )
     {
-        return await _orderRepository.GetAsync( id ).ToActionResult();
+        return await _orderService.Get( id ).ToActionResult();
     }
 
     [HttpGet]
     public async Task<ActionResult<Page<OrderDto>>> QueryAsync( [FromQuery] OrderQuery query )
     {
-        return await _orderRepository.QueryAsync( query ).ToActionResult();
+        return await _orderService.Get( query ).ToActionResult();
     }
 
     [HttpPost]
     public async Task<ActionResult<OrderDto>> Post( [FromBody] OrderCreateDto order )
     {
-        return await _orderRepository.AddAsync( order ).ToActionResult();
+        return await _orderService.Create( order ).ToActionResult();
     }
 
     [HttpPut( "{id}" )]

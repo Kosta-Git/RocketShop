@@ -20,4 +20,16 @@ public static class ValidationRuleExtensions
             Enabled       = rule.Enabled
         };
     }
+
+    public static ValidationRule AsEntity( this ValidationRuleDto rule )
+    {
+        return new ValidationRule
+        {
+            Id            = rule.Id,
+            Start         = rule.Start,
+            End           = rule.End,
+            Confirmations = rule.Confirmations,
+            Enabled       = rule.Enabled
+        };
+    }
 }
